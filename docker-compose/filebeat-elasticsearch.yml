@@ -1,0 +1,24 @@
+filebeat.prospectors:
+- type: log
+  paths:
+    - /mnt/logs/*.json
+  fields_under_root: true
+  json:
+    message_key: log
+    keys_under_root: true
+    overwrite_keys: true
+  fields.logger: json
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  index: "structure"
+
+setup:
+  kibana.host: "http://kibana:5601"
+  dashboards.enabled: true
+  template.name: "structure"
+  template.pattern: "structure"
+
+xpack.monitoring:
+  enabled: true
+  elasticsearch: ~

@@ -1,0 +1,71 @@
+---
+version: '3'
+services:
+
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_STACK_VERSION}
+    hostname: elasticsearch
+    environment:
+      - 'http.host=0.0.0.0'
+      - 'transport.host=127.0.0.1'
+    ports:
+      - '127.0.0.1:9200:9200'
+    networks: ['stack']
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_STACK_VERSION}
+    hostname: kibana
+    ports:
+      - '127.0.0.1:5601:5601'
+    networks: ['stack']
+    depends_on: ['elasticsearch']
+
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELASTIC_STACK_VERSION}
+    hostname: logstash
+    ports:
+      - '127.0.0.1:4560:4560'
+      - '127.0.0.1:5044:5044'
+    volumes:
+      # Provide a pipeline configuration for Logstash with a bind-mounted file
+      - ./docker-compose/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    networks: ['stack']
+    depends_on: ['elasticsearch']
+
+
+  # Filebeat sending data to Logstash; since only a single output is supported we need two Filebeat containers
+  filebeat_for_logstash:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+    hostname: filebeat_for_logstash
+    volumes:
+      # Bind-mount the logs/ directory, so Filebeat can read its files
+      - './logs/:/mnt/logs/:ro'
+      # Bind-mount a custom configuration file
+      - './docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro'
+    command: filebeat -e
+    restart: on-failure
+    networks: ['stack']
+    # Relying on the other Filebeat to do the Kibana setup (not possible through Logstash)
+    depends_on: ['elasticsearch', 'logstash', 'filebeat_for_elasticsearch']
+
+
+  # Filebeat sending data to Elasticsearch; since only a single output is supported we need two Filebeat containers
+  filebeat_for_elasticsearch:
+      image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+      hostname: filebeat_for_elasticsearch
+      volumes:
+        # Bind-mount the logs/ directory, so Filebeat can read its files
+        - './logs/:/mnt/logs/:ro'
+        # Bind-mount a custom configuration file
+        - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
+      command: filebeat -e
+      restart: on-failure
+      networks: ['stack']
+      # Using Filebeat to do the setup in Kibana
+      depends_on: ['elasticsearch', 'kibana']
+
+
+networks: {stack: {}}

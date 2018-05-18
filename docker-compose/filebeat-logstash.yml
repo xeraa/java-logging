@@ -1,0 +1,17 @@
+filebeat.prospectors:
+- type: log
+  paths:
+    - /mnt/logs/*.log
+  multiline:
+    pattern: '^\['
+    negate: true
+    match: after
+  fields.logger: log
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+xpack.monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: ["http://elasticsearch:9200"]
