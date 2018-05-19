@@ -16,3 +16,12 @@ The [slides for this talk are available on Speaker Deck](https://speakerdeck.com
 * **JDK 8+** and **Gradle** to run the Java code.
 * **Docker** (and Docker Compose) to run all the required components of the Elastic Stack (Filebeat, Logstash,
 Elasticsearch, and Kibana) and the containerized Java application.
+
+
+## Usage
+
+* Bring up the Elastic Stack: `$ docker-compose up`
+* Run the Java application: `$ gradle run`
+* Remove the Elastic Stack (and its volumes): `$ docker-compose down -v`
+
+
