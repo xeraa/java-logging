@@ -14,24 +14,30 @@ public class LogMe {
     public static void main(String[] args) {
         Random random = new Random();
 
-        for(int i=0; i<10; i++) {
+        for(int i=1; i<=20; i++) {
 
             // Generate a random session ID between 0 and 99 and add it as an MDC log as well as the iteration count
             String session = String.valueOf(random.nextInt(99));
             MDC.put("session", session);
             MDC.put("loop", String.valueOf(i));
 
-            // Log an info and a warn (including the session ID) message
-            logger.info("Give me an info");
-            logger.warn("Give me a warn for session '{}'", session);
+            // Trace information for the loop run
+            logger.trace("Iteration '{}' and session '{}'", i, session);
 
-            // Include a caught exception for every third run
-            if(i % 3 == 0) {
+            // Log some errors, warns, infos, and debugs
+            if(i % 15 == 0){
                 try {
-                    throw new RuntimeException("Give me an exception");
+                    throw new RuntimeException("Bad runtime...");
                 } catch (RuntimeException e) {
-                    logger.error("Hit a runtime exception", e);
+                    MDC.put("user_experience", "\uD83E\uDD2C");
+                    logger.error("Wake me up at night", e);
                 }
+            } else if (i % 5 == 0){
+                logger.warn("Investigate tomorrow");
+            } else if (i % 3 == 0){
+                logger.info("Collect in production");
+            } else {
+                logger.debug("Collect in development");
             }
 
             MDC.clear();

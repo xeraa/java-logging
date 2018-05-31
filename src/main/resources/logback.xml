@@ -66,8 +66,8 @@
     </appender>
 
 
-    <!-- The default root log level is set to DEBUG -->
-    <root level="DEBUG">
+    <!-- The default root log level is set to TRACE -->
+    <root level="TRACE">
         <appender-ref ref="console"/>
         <appender-ref ref="flatfile"/>
         <appender-ref ref="logstash"/>
