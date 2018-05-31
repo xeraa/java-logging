@@ -43,6 +43,7 @@ Elasticsearch, and Kibana) and the containerized Java application.
    generally be the perfect number.
 1. See the `_grokparsefailure` in the tag field. Enable the multiline rules in Filebeat and restart it with
    `docker-compose restart filebeat_for_logstash `.
+1. Show that this is working as expected now and drill down to the errors to see which emoji we are logging.
 1. Create a vertical bar chart visualization on the `level` field. Further break it down into `session`.
 
 
@@ -51,7 +52,8 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. Run the sunshine case and show the data in the *send* index.
 1. Stop Logstash with `docker-compose stop logstash`.
 1. Run the application and restart Logstash after that again with `docker-compose start logstash`.
-1. Show the missing data for example by comparing it to the results in the *parse* index.
+1. Show the missing data for example by comparing it to the results in the *parse* index, which will be populated once
+   Filebeat can reach Logstash again.
 
 
 ### Structure
