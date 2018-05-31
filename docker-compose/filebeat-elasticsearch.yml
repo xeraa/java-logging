@@ -13,12 +13,6 @@ output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
   index: "structure"
 
-setup:
-  kibana.host: "http://kibana:5601"
-  dashboards.enabled: true
-  template.name: "structure"
-  template.pattern: "structure"
-
 xpack.monitoring:
   enabled: true
   elasticsearch: ~
