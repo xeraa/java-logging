@@ -4,5 +4,3 @@ build/
 logs/
 out/
 
-*.gz
-

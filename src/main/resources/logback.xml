@@ -4,7 +4,7 @@
 
 
     <!-- Define the filename for all persisted log files -->
-    <property name="LOG_FILE" value="java-logging"/>​
+    <property name="LOG_FILE" value="./logs/java-logging"/>​
 
 
     <!-- Configuration for logging to the console -->
@@ -18,7 +18,7 @@
 
     <!-- Configuration for logging to a flat file -->
     <appender name="flatfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/${LOG_FILE}.log</file>
+        <file>${LOG_FILE}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_FILE}.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>7</maxHistory>
@@ -39,7 +39,7 @@
 
     <!-- Configuration for logging to a JSON file -->
     <appender name="json" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/${LOG_FILE}.json</file>
+        <file>${LOG_FILE}.json</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>7</maxHistory>
