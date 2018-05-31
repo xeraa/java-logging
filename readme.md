@@ -37,7 +37,8 @@ Elasticsearch, and Kibana) and the containerized Java application.
    `^\[%{TIMESTAMP_ISO8601:timestamp}\]%{SPACE}%{LOGLEVEL:level}`. The rest will be done with the *logstash.conf*.
 1. Try to find the log statements in Kibana's Discover view for the *parse* index.
 1. Show the last 15min and up to 3h into the future to see that the timestamp is wrong. Fix it by uncommenting the
-   `timezone` field and restart Logstash with `$ docker-compose restart logstash`.
+   `timezone` field and restart Logstash with `docker-compose restart logstash`.
+1. Also show the pipeline in Kibana's monitoring view.
 1. Run the code again and see that the timezone is fine now. But we have 42 entries instead of 40 — though 42 would
    generally be the perfect number.
 1. See the `_grokparsefailure` in the tag field. Enable the multiline rules in Filebeat and restart it with
