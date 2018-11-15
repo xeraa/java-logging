@@ -9,6 +9,7 @@ services:
     environment:
       - 'http.host=0.0.0.0'
       - 'transport.host=127.0.0.1'
+      - 'xpack.monitoring.collection.enabled=true'
     ports:
       - '127.0.0.1:9200:9200'
     networks: ['stack']
@@ -26,6 +27,8 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELASTIC_STACK_VERSION}
     hostname: logstash
+    environment:
+      - 'xpack.monitoring.enabled=true'
     ports:
       - '127.0.0.1:4560:4560'
       - '127.0.0.1:5044:5044'
