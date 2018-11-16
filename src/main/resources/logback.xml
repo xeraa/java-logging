@@ -34,7 +34,6 @@
     <appender name="logstash" class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
         <destination>127.0.0.1:4560</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-        <mdc/>
     </appender>
     ​
 
