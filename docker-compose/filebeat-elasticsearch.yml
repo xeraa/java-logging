@@ -1,17 +1,24 @@
-filebeat.prospectors:
-- type: log
-  paths:
-    - /mnt/logs/*.json
-  fields_under_root: true
-  json:
-    message_key: log
-    keys_under_root: true
-    overwrite_keys: true
-  fields.logger: json
+filebeat.registry_file: /usr/share/filebeat/data/registry
+
+filebeat.config.inputs:
+  path: ${path.config}/prospectors.d/*.yml
+  reload.enabled: true
+
+processors:
+- add_host_metadata: ~
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
   index: "structure"
+
+setup.template:
+  pattern: "structure"
+  name: "structure"
+  settings.index:
+    number_of_shards: 1
+    number_of_replicas: 0
+
+logging.to_files: false
 
 xpack.monitoring:
   enabled: true

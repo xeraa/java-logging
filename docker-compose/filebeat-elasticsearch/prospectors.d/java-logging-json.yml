@@ -1,0 +1,4 @@
+- type: log
+  paths:
+    - /mnt/logs/*.json
+  fields_under_root: true

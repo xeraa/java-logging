@@ -12,7 +12,8 @@ services:
       - 'xpack.monitoring.collection.enabled=true'
     ports:
       - '127.0.0.1:9200:9200'
-    networks: ['stack']
+    networks:
+      - stack
 
 
   kibana:
@@ -20,8 +21,10 @@ services:
     hostname: kibana
     ports:
       - '127.0.0.1:5601:5601'
-    networks: ['stack']
-    depends_on: ['elasticsearch']
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
 
 
   logstash:
@@ -35,11 +38,13 @@ services:
     volumes:
       # Provide a pipeline configuration for Logstash with a bind-mounted file
       - ./docker-compose/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    networks: ['stack']
-    depends_on: ['elasticsearch']
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
 
 
-  # Filebeat sending data to Logstash; since only a single output is supported we need two Filebeat containers
+  # Filebeat sending data to Logstash
   filebeat_for_logstash:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
     hostname: filebeat_for_logstash
@@ -48,27 +53,40 @@ services:
       - './logs/:/mnt/logs/:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro'
+      # Bind-mount the prospectors directory, so configurations can be dynamically loaded
+      - './docker-compose/filebeat-logstash/prospectors.d/:/usr/share/filebeat/prospectors.d/:ro'
+      # Bind-mount the registry file to avoid data duplication between restarts
+      - './docker-compose/filebeat-logstash/registry/:/usr/share/filebeat/data/'
     command: filebeat -e
     restart: on-failure
-    networks: ['stack']
-    # Relying on the other Filebeat to do the Kibana setup (not possible through Logstash)
-    depends_on: ['elasticsearch', 'logstash', 'filebeat_for_elasticsearch']
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - logstash
 
 
-  # Filebeat sending data to Elasticsearch; since only a single output is supported we need two Filebeat containers
+  # Filebeat sending data to Elasticsearch
   filebeat_for_elasticsearch:
-      image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
-      hostname: filebeat_for_elasticsearch
-      volumes:
-        # Bind-mount the logs/ directory, so Filebeat can read its files
-        - './logs/:/mnt/logs/:ro'
-        # Bind-mount a custom configuration file
-        - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
-      command: filebeat -e
-      restart: on-failure
-      networks: ['stack']
-      # Using Filebeat to do the setup in Kibana
-      depends_on: ['elasticsearch', 'kibana']
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+    hostname: filebeat_for_elasticsearch
+    volumes:
+      # Bind-mount the logs/ directory, so Filebeat can read its files
+      - './logs/:/mnt/logs/:ro'
+      # Bind-mount a custom configuration file
+      - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
+      # Bind-mount the prospectors directory, so configurations can be dynamically loaded
+      - './docker-compose/filebeat-elasticsearch/prospectors.d/:/usr/share/filebeat/prospectors.d/:ro'
+      # Bind-mount the registry file to avoid data duplication between restarts
+      - './docker-compose/filebeat-elasticsearch/registry/:/usr/share/filebeat/data/'
+    command: 'filebeat -e'
+    restart: on-failure
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - kibana
 
 
-networks: {stack: {}}
+networks:
+  stack: {}
