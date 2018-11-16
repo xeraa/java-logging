@@ -2,3 +2,6 @@
   paths:
     - /mnt/logs/*.json
   fields_under_root: true
+  json:
+    message_key: message
+    keys_under_root: true
