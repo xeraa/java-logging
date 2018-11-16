@@ -54,11 +54,11 @@
                 <pattern>
                     <pattern>
                         {
-                        "severity": "%level",
-                        "thread": "%thread",
-                        "class": "%logger",
+                        "log.level": "%level",
+                        "log.method": "%thread",
+                        "log.package": "%logger",
                         "message": "%message",
-                        "exception": "%exception"
+                        "error.message": "%exception"
                         }
                     </pattern>
                 </pattern>
