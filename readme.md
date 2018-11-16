@@ -33,16 +33,17 @@ Elasticsearch, and Kibana) and the containerized Java application.
 
 ### Parse
 
-1. Copy a log line and start disecting it with the Grok Debugger in Kibana, for example with the pattern
+1. Copy a log line and start parsing it with the Grok Debugger in Kibana, for example with the pattern
    `^\[%{TIMESTAMP_ISO8601:timestamp}\]%{SPACE}%{LOGLEVEL:level}`. The rest will be done with the *logstash.conf*.
-1. Try to find the log statements in Kibana's Discover view for the *parse* index.
-1. Show the last 15min and up to 3h into the future to see that the timestamp is wrong. Fix it by uncommenting the
-   `timezone` field and restart Logstash with `docker-compose restart logstash`.
-1. Also show the pipeline in Kibana's monitoring view.
-1. Run the code again and see that the timezone is fine now. But we have 42 entries instead of 40 — though 42 would
-   generally be the perfect number.
-1. See the `_grokparsefailure` in the tag field. Enable the multiline rules in Filebeat and restart it with
-   `docker-compose restart filebeat_for_logstash `.
+1. Point to [https://github.com/elastic/ecs](https://github.com/elastic/ecs) for the naming conventions.
+1. Show the Data Visualizer in Machine Learning by uploading the LOG file. The output is actually quite good already,
+   but we are sticking with our manual rules for now.
+1. Find the log statements in Kibana's Discover view for the *parse* index.
+1. Show the pipeline in Kibana's Monitoring view as well as the other components in Monitoring.
+1. How many log events should we have? 40. But we have 42 entries instead. Even though 42 would generally be the perfect
+   number, here it's not.
+1. See the `_grokparsefailure` in the tag field. Enable the multiline rules in Filebeat. It should automatically
+   refresh and when you run the application again it should now only collect 40 events.
 1. Show that this is working as expected now and drill down to the errors to see which emoji we are logging.
 1. Create a vertical bar chart visualization on the `level` field. Further break it down into `session`.
 
@@ -54,6 +55,7 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. Run the application and restart Logstash after that again with `docker-compose start logstash`.
 1. Show the missing data for example by comparing it to the results in the *parse* index, which will be populated once
    Filebeat can reach Logstash again.
+1. Finally, you would need to rename the fields to match ECS in a Logstash filter.
 
 
 ### Structure
