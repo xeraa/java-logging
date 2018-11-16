@@ -1,3 +1,7 @@
 - type: log
   paths:
     - /mnt/logs/*.log
+#  multiline:
+#    pattern: '^\['
+#    negate: true
+#    match: after
