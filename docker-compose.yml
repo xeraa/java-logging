@@ -88,5 +88,19 @@ services:
       - kibana
 
 
+  #Short lived container to configure the stack once Kibana and Elasticsearch are available
+  configure_stack:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+    hostname: configure_stack
+    volumes:
+      - './docker-compose/setup.sh:/usr/local/bin/setup.sh:ro'
+    command: '/usr/local/bin/setup.sh'
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - kibana
+
+
 networks:
   stack: {}
