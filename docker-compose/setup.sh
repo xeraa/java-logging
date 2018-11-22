@@ -27,16 +27,16 @@ done
 sleep 10
 
 # Create the index patterns. For some reason the first request always fails, so send a foo for that
-for PATTERN in "foo" "parse" "send" "structure" "docker"
+for PATTERN in "parse" "send" "structure" "docker"
 do
   echo $PATTERN
-  curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" --silent \
+  curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
     "$KIBANA/api/saved_objects/index-pattern/$PATTERN" \
     -d '{ "attributes": { "title": "'$PATTERN'", "timeFieldName": "@timestamp" } }'
 done
 
 # Make parse the default index
-curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" --silent \
+curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
   "$KIBANA/api/kibana/settings/defaultIndex" \
   -d '{ "value": "parse" }'
 
