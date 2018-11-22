@@ -1,7 +1,7 @@
 filebeat.registry_file: /usr/share/filebeat/data/registry
 
 filebeat.config.inputs:
-  path: ${path.config}/prospectors.d/*.yml
+  path: ${path.config}/config/*.yml
   reload.enabled: true
 
 processors:

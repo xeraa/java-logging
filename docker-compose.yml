@@ -53,8 +53,8 @@ services:
       - './logs/:/mnt/logs/:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro'
-      # Bind-mount the prospectors directory, so configurations can be dynamically loaded
-      - './docker-compose/filebeat-logstash/prospectors.d/:/usr/share/filebeat/prospectors.d/:ro'
+      # Bind-mount the config directory so it can be dynamically loaded
+      - './docker-compose/filebeat-logstash/config/:/usr/share/filebeat/config/:ro'
       # Bind-mount the registry file to avoid data duplication between restarts
       - './docker-compose/filebeat-logstash/registry/:/usr/share/filebeat/data/'
     command: filebeat -e
@@ -75,8 +75,8 @@ services:
       - './logs/:/mnt/logs/:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
-      # Bind-mount the prospectors directory, so configurations can be dynamically loaded
-      - './docker-compose/filebeat-elasticsearch/prospectors.d/:/usr/share/filebeat/prospectors.d/:ro'
+      # Bind-mount the config directory so it can be dynamically loaded
+      - './docker-compose/filebeat-elasticsearch/config/:/usr/share/filebeat/config/:ro'
       # Bind-mount the registry file to avoid data duplication between restarts
       - './docker-compose/filebeat-elasticsearch/registry/:/usr/share/filebeat/data/'
     command: 'filebeat -e'
