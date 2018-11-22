@@ -39,3 +39,7 @@ done
 curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" --silent \
   "$KIBANA/api/kibana/settings/defaultIndex" \
   -d '{ "value": "parse" }'
+
+# Add an alias to make our logs appear in the Log UI
+curl -f -XPOST -H "Content-Type: application/json" "$ELASTICSEARCH/_aliases" \
+  -d '{ "actions" : [ { "add" : { "index" : "structure", "alias" : "filebeat-structure" } } ] }'
