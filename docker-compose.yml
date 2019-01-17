@@ -88,6 +88,32 @@ services:
       - kibana
 
 
+  # Metricbeat to optionally collect metrics from the entire setup; not required for logging itself
+  metricbeat:
+    container_name: metricbeat
+    hostname: metricbeat
+    user: root #To read the docker socket
+    image: docker.elastic.co/beats/metricbeat:${ELASTIC_STACK_VERSION}
+    volumes:
+      # Bind-mount a custom configuration file
+      - './docker-compose/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro'
+      # Bind-mount the config directory so it can be dynamically loaded
+      - './docker-compose/metricbeat/config/:/usr/share/metricbeat/config/:ro'
+      # Monitor the Docker host rather than the Metricbeat container; these are used by the system module
+      - '/proc:/hostfs/proc:ro'
+      - '/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro'
+      - '/:/hostfs:ro'
+      # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    command: 'metricbeat -e'
+    restart: on-failure
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - kibana
+
+
   #Short lived container to configure the stack once Kibana and Elasticsearch are available
   configure_stack:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
