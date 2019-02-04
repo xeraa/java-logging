@@ -3,8 +3,8 @@ metricbeat.config.modules:
   reload.period: 10s
 
 processors:
-- add_docker_metadata: ~
-- add_host_metadata: ~
+  - add_docker_metadata: ~
+  - add_host_metadata: ~
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]

@@ -1,17 +1,23 @@
 ---
-version: '3'
+version: '3.3'
 services:
 
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_STACK_VERSION}
     hostname: elasticsearch
+    container_name: elasticsearch
     environment:
       - 'http.host=0.0.0.0'
       - 'transport.host=127.0.0.1'
       - 'xpack.monitoring.collection.enabled=true'
     ports:
       - '127.0.0.1:9200:9200'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cat/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - stack
 
@@ -19,6 +25,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:${ELASTIC_STACK_VERSION}
     hostname: kibana
+    container_name: kibana
     ports:
       - '127.0.0.1:5601:5601'
     networks:
@@ -30,6 +37,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELASTIC_STACK_VERSION}
     hostname: logstash
+    container_name: logstash
     environment:
       - 'xpack.monitoring.enabled=true'
     ports:
@@ -48,9 +56,10 @@ services:
   filebeat_for_logstash:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
     hostname: filebeat_for_logstash
+    container_name: filebeat_for_logstash
     volumes:
       # Bind-mount the logs/ directory, so Filebeat can read its files
-      - './logs/:/mnt/logs/:ro'
+      - './logs-docker/:/mnt/logs/:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro'
       # Bind-mount the config directory so it can be dynamically loaded
@@ -70,9 +79,10 @@ services:
   filebeat_for_elasticsearch:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
     hostname: filebeat_for_elasticsearch
+    container_name: filebeat_for_elasticsearch
     volumes:
       # Bind-mount the logs/ directory, so Filebeat can read its files
-      - './logs/:/mnt/logs/:ro'
+      - './logs-docker/:/mnt/logs/:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
       # Bind-mount the config directory so it can be dynamically loaded
@@ -88,10 +98,36 @@ services:
       - kibana
 
 
+  # Filebeat collecting from a Docker container and sending to Elasticsearch
+  filebeat_docker_for_elasticsearch:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+    hostname: filebeat_docker_for_elasticsearch
+    container_name: filebeat_docker_for_elasticsearch
+    user: root #To read the docker socket
+    volumes:
+      # Bind-mount the Docker log directory from the Java container, so Filebeat can read its files
+      - '/var/lib/docker/containers:/var/lib/docker/containers:ro'
+      # Bind-mount a custom configuration file
+      - './docker-compose/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro'
+      # Bind-mount the config directory so it can be dynamically loaded
+      - './docker-compose/filebeat-docker/config/:/usr/share/filebeat/config/:ro'
+      # Bind-mount the registry file to avoid data duplication between restarts
+      - './docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/'
+      # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    command: 'filebeat -e'
+    restart: on-failure
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - kibana
+
+
   # Metricbeat to optionally collect metrics from the entire setup; not required for logging itself
   metricbeat:
-    container_name: metricbeat
     hostname: metricbeat
+    container_name: metricbeat
     user: root #To read the docker socket
     image: docker.elastic.co/beats/metricbeat:${ELASTIC_STACK_VERSION}
     volumes:
@@ -118,6 +154,7 @@ services:
   configure_stack:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
     hostname: configure_stack
+    container_name: configure_stack
     volumes:
       - './docker-compose/setup.sh:/usr/local/bin/setup.sh:ro'
     command: '/usr/local/bin/setup.sh'
@@ -126,6 +163,28 @@ services:
     depends_on:
       - elasticsearch
       - kibana
+
+  #The Java app to be monitored
+  java_app:
+    hostname: java_app
+    container_name: java_app
+    build:
+      dockerfile: $PWD/dockerfile_java
+      context: $PWD
+      labels:
+        - "app=fizzbuzz"
+        - "co.elastic.logs/multiline.pattern=^\\["
+        - "co.elastic.logs/multiline.negate=true"
+        - "co.elastic.logs/multiline.match=after"
+        #- "co.elastic.logs/pipeline=parse_java"
+    volumes:
+      # Bind-mount the log folder to the host so a sidecar can collect the logs
+      - './logs-docker/:/logs/'
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - logstash
 
 
 networks:

@@ -12,6 +12,10 @@ do
   sleep 5
 done
 
+# Add an ingest pipeline
+curl -f -XPUT -H "Content-Type: application/json" "$ELASTICSEARCH/_ingest/pipeline/parse_java" \
+  -d @/usr/local/bin/setup_ingest-pipeline_parse-java.json
+
 # Create an index template
 curl -f -XPUT -H "Content-Type: application/json" "$ELASTICSEARCH/_template/general" \
   -d '{ "index_patterns": ["*"], "settings": { "number_of_shards": 1, "number_of_replicas": 0 } }'
@@ -35,10 +39,13 @@ do
     -d '{ "attributes": { "title": "'$PATTERN'", "timeFieldName": "@timestamp" } }'
 done
 
-# Make parse the default index
+# Set a default index pattern
 curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
   "$KIBANA/api/kibana/settings/defaultIndex" \
-  -d '{ "value": "parse" }'
+  -d '{ "value": "docker" }'
+
+# Wait a bit until data has been collected to set the alias (fails on non-existant indices)
+sleep 2m
 
 # Add an alias to make our logs appear in the Log UI
 curl -f -XPOST -H "Content-Type: application/json" "$ELASTICSEARCH/_aliases" \

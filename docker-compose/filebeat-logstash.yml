@@ -5,7 +5,7 @@ filebeat.config.inputs:
   reload.enabled: true
 
 processors:
-- add_host_metadata: ~
+  - add_host_metadata: ~
 
 output.logstash:
   hosts: ["logstash:5044"]
