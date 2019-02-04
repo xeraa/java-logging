@@ -109,8 +109,6 @@ services:
       - '/var/lib/docker/containers:/var/lib/docker/containers:ro'
       # Bind-mount a custom configuration file
       - './docker-compose/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro'
-      # Bind-mount the config directory so it can be dynamically loaded
-      - './docker-compose/filebeat-docker/config/:/usr/share/filebeat/config/:ro'
       # Bind-mount the registry file to avoid data duplication between restarts
       - './docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/'
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
@@ -157,6 +155,7 @@ services:
     container_name: configure_stack
     volumes:
       - './docker-compose/setup.sh:/usr/local/bin/setup.sh:ro'
+      - './docker-compose/setup_ingest-pipeline_parse-java.json:/usr/local/bin/setup_ingest-pipeline_parse-java.json:ro'
     command: '/usr/local/bin/setup.sh'
     networks:
       - stack
@@ -176,7 +175,6 @@ services:
         - "co.elastic.logs/multiline.pattern=^\\["
         - "co.elastic.logs/multiline.negate=true"
         - "co.elastic.logs/multiline.match=after"
-        #- "co.elastic.logs/pipeline=parse_java"
     volumes:
       # Bind-mount the log folder to the host so a sidecar can collect the logs
       - './logs-docker/:/logs/'
