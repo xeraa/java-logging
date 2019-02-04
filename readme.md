@@ -20,21 +20,23 @@ Elasticsearch, and Kibana) and the containerized Java application.
 
 ## Usage
 
-* Bring up the Elastic Stack: `$ docker-compose up`
-* Run the Java application: `$ gradle run`
+* Build the Java application: `$ gradle build`
+* Bring up the Elastic Stack: `$ docker-compose up --build`
+* Rerun the Java application if necessary: `$ docker restart <ID of the Java app>`
 * Remove the Elastic Stack (and its volumes): `$ docker-compose down -v`
 
 
 ## Demo
 
 1. Take a look at the code — which pattern are we building with log statements here?
-1. Run it with `gradle run` and see the output in the console.
 
 
 ### Parse
 
 1. Copy a log line and start parsing it with the Grok Debugger in Kibana, for example with the pattern
-   `^\[%{TIMESTAMP_ISO8601:timestamp}\]%{SPACE}%{LOGLEVEL:level}`. The rest will be done with the *logstash.conf*.
+   `^\[%{TIMESTAMP_ISO8601:timestamp}\]%{SPACE}%{LOGLEVEL:level}` — show
+   [https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns](https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns)
+   to get started. The rest will be done with the *logstash.conf*.
 1. Point to [https://github.com/elastic/ecs](https://github.com/elastic/ecs) for the naming conventions.
 1. Show the Data Visualizer in Machine Learning by uploading the LOG file. The output is actually quite good already,
    but we are sticking with our manual rules for now.
@@ -50,11 +52,8 @@ Elasticsearch, and Kibana) and the containerized Java application.
 
 ### Send
 
-1. Run the sunshine case and show the data in the *send* index.
-1. Stop Logstash with `docker-compose stop logstash`.
-1. Run the application and restart Logstash after that again with `docker-compose start logstash`.
-1. Show the missing data for example by comparing it to the results in the *parse* index, which will be populated once
-   Filebeat can reach Logstash again.
+1. Show that the logs are missing from the first run, since no connection to Logstash had been established yet.
+1. Rerun the application and see that it is working now. And we have already seen the main downside of this approach.
 1. Finally, you would need to rename the fields to match ECS in a Logstash filter.
 
 
@@ -63,3 +62,11 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. Run the application and show the data in the *structure* index.
 1. Show the Logback configuration for JSON, since it is a little more complicated than the others.
 
+
+### Containerize
+
+1. Show the metadata we are collecting now.
+1. See why the `console` output works here, but we should turn off the colorization (otherwise the parsing breaks).
+1. Turn on the ingest pipeline and to show how everything is working, rebuild the Java app and restart Docker Compose.
+1. See why we needed the grok failure rule, because of the startup error from sending to Logstash directly.
+1. Filter to the right container name and point out the hinting that stops the multiline statements from being broken up.

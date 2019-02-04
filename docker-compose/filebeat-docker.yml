@@ -12,10 +12,10 @@ processors:
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
   index: "docker"
-  pipelines:
-    - pipeline: "parse_java"
-      when.contains:
-        docker.container.name: "java_app"
+  #pipelines:
+  #  - pipeline: "parse_java"
+  #    when.contains:
+  #      docker.container.name: "java_app"
 
 setup.template.pattern: "docker"
 setup.template.name: "docker"
