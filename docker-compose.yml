@@ -113,7 +113,7 @@ services:
       - './docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/'
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
-    command: 'filebeat -e'
+    command: 'filebeat'
     restart: on-failure
     networks:
       - stack

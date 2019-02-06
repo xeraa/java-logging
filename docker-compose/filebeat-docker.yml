@@ -20,7 +20,7 @@ output.elasticsearch:
 setup.template.pattern: "docker"
 setup.template.name: "docker"
 
-logging.to_files: false
+logging.to_files: true
 
 xpack.monitoring:
   enabled: true
