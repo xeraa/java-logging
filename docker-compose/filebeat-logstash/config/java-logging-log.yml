@@ -6,3 +6,5 @@
   #  negate: true
   #  match: after
   #exclude_lines: ['.*TRACE.*']
+  fields:
+    environment: production

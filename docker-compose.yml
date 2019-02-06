@@ -172,6 +172,7 @@ services:
       context: $PWD
       labels:
         - "app=fizzbuzz"
+        - "environment=production"
         - "co.elastic.logs/multiline.pattern=^\\["
         - "co.elastic.logs/multiline.negate=true"
         - "co.elastic.logs/multiline.match=after"
