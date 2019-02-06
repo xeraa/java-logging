@@ -27,8 +27,8 @@ do
   sleep 5
 done
 
-# Sleep an extra 10s to avoid the "Kibana server is not ready yet" error
-sleep 10
+# Sleep an extra 30s to avoid the "Kibana server is not ready yet" error
+sleep 30s
 
 # Create the index patterns. For some reason the first request always fails, so send a foo for that
 for PATTERN in "parse" "send" "structure" "docker"
