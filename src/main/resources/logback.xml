@@ -50,6 +50,7 @@
                 <timestamp>
                     <timeZone>UTC</timeZone>
                 </timestamp>
+                <stackHash/>
                 <pattern>
                     <pattern>
                         {
