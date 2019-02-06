@@ -3,7 +3,7 @@
   "processors": [ {
       "grok": {
         "field": "message",
-        "patterns": [ "^\\[%{TIMESTAMP_ISO8601:timestamp}\\]%{SPACE}%{LOGLEVEL:log.level}%{SPACE}%{USERNAME:log.package}%{SPACE}\\[%{WORD:log.method}\\]%{SPACE}-%{SPACE}%{GREEDYDATA:labels}%{SPACE}-%{SPACE}%{GREEDYDATA:message_rest}(?:\\n+(?<stacktrace>(?:.|\\r|\\n)+))?" ],
+        "patterns": [ "^\\[%{TIMESTAMP_ISO8601:timestamp}\\]%{SPACE}%{LOGLEVEL:log.level}%{SPACE}%{USERNAME:log.package}%{SPACE}\\[%{WORD:log.method}\\]%{SPACE}-%{SPACE}%{GREEDYDATA:labels}%{SPACE}-%{SPACE}%{GREEDYDATA:message_parsed}(?:\\n+(?<stacktrace>(?:.|\\r|\\n)+))?" ],
         "ignore_failure": true
       }
   } ]
