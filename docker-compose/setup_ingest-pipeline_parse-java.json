@@ -1,10 +1,20 @@
 {
   "description" : "Parse Java log lines",
-  "processors": [ {
+  "processors": [
+    {
       "grok": {
         "field": "message",
         "patterns": [ "^\\[%{TIMESTAMP_ISO8601:timestamp}\\]%{SPACE}%{LOGLEVEL:log.level}%{SPACE}%{USERNAME:log.package}%{SPACE}\\[%{WORD:log.method}\\]%{SPACE}-%{SPACE}%{GREEDYDATA:labels}%{SPACE}-%{SPACE}%{GREEDYDATA:message_parsed}(?:\\n+(?<stacktrace>(?:.|\\r|\\n)+))?" ],
         "ignore_failure": true
       }
-  } ]
+    },
+    {
+      "kv": {
+        "field": "labels",
+        "field_split": ", ",
+        "value_split": "=",
+        "ignore_failure": true
+      }
+    }
+  ]
 }
