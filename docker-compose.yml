@@ -111,6 +111,8 @@ services:
       - './docker-compose/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro'
       # Bind-mount the registry file to avoid data duplication between restarts
       - './docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/'
+      # Bind-mount the Filebeat log file (not going to system out to avoid a logging loop)
+      - './docker-compose/filebeat-docker/logs/:/usr/share/filebeat/logs/'
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
     command: 'filebeat'
