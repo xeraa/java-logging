@@ -15,7 +15,7 @@ output.elasticsearch:
   pipelines:
     - pipeline: "parse_java"
       when.contains:
-        docker.container.name: "java_app"
+        container.name: "java_app"
 
 setup:
   ilm:
