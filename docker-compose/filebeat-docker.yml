@@ -1,4 +1,4 @@
-filebeat.registry_file: /usr/share/filebeat/data/registry
+filebeat.registry.path: /usr/share/filebeat/data/registry
 
 filebeat.autodiscover:
   providers:
@@ -17,8 +17,17 @@ output.elasticsearch:
       when.contains:
         docker.container.name: "java_app"
 
-setup.template.pattern: "docker"
-setup.template.name: "docker"
+setup:
+  ilm:
+    enabled: true
+    rollover_alias: "docker"
+    pattern: "{now/M{yyyy.MM}}-00"
+  template:
+    pattern: "docker"
+    name: "docker"
+    settings.index:
+      number_of_shards: 1
+      number_of_replicas: 0
 
 logging.to_files: true
 

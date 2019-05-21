@@ -1,4 +1,4 @@
-filebeat.registry_file: /usr/share/filebeat/data/registry
+filebeat.registry.path: /usr/share/filebeat/data/registry
 
 filebeat.config.inputs:
   path: ${path.config}/config/*.yml
@@ -11,12 +11,17 @@ output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
   index: "structure"
 
-setup.template:
-  pattern: "structure"
-  name: "structure"
-  settings.index:
-    number_of_shards: 1
-    number_of_replicas: 0
+setup:
+  ilm:
+    enabled: true
+    rollover_alias: "structure"
+    pattern: "{now/M{yyyy.MM}}-00"
+  template:
+    pattern: "structure"
+    name: "structure"
+    settings.index:
+      number_of_shards: 1
+      number_of_replicas: 0
 
 logging.to_files: false
 
