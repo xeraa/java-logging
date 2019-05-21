@@ -36,10 +36,10 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. Copy a log line and start parsing it with the Grok Debugger in Kibana, for example with the pattern
    `^\[%{TIMESTAMP_ISO8601:timestamp}\]%{SPACE}%{LOGLEVEL:level}` — show
    [https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns](https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns)
-   to get started. The rest will be done with the *logstash.conf*.
+   to get started. The rest of the pattern can be copied from *logstash.conf*.
 1. Point to [https://github.com/elastic/ecs](https://github.com/elastic/ecs) for the naming conventions.
 1. Show the Data Visualizer in Machine Learning by uploading the LOG file. The output is actually quite good already,
-   but we are sticking with our manual rules for now.
+   but we are sticking to our manual rules for now.
 1. Find the log statements in Kibana's Discover view for the *parse* index.
 1. Show the pipeline in Kibana's Monitoring view as well as the other components in Monitoring.
 1. How many log events should we have? 40. But we have 42 entries instead. Even though 42 would generally be the perfect
@@ -67,6 +67,7 @@ Elasticsearch, and Kibana) and the containerized Java application.
 
 1. Show the metadata we are collecting now.
 1. See why the `console` output works here, but we should turn off the colorization (otherwise the parsing breaks).
-1. Turn on the ingest pipeline and to show how everything is working, rebuild the Java app and restart Docker Compose.
+1. Turn on the ingest pipeline and show how everything is working. Then rebuild the Java app and restart Docker Compose.
 1. See why we needed the grok failure rule, because of the startup error from sending to Logstash directly.
-1. Filter to the right container name and point out the hinting that stops the multiline statements from being broken up.
+1. Filter to the right container name and point out the hinting that stops the multiline statements from being broken
+up.
