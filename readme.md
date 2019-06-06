@@ -71,5 +71,5 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. See why we needed the grok failure rule, because of the startup error from sending to Logstash directly.
 1. Filter to down to `container.name : "java_app"` and point out the hinting that stops the multiline statements from
    being broken up.
-1. Point out that we are breaking up the output into two indices — *docker-\** and *docker-java-\**.
+1. Point out how you could break up the output into two indices — *docker-\** and *docker-java-\**.
 1. Show the new Logs UI (adapt the pattern to match the right index).
