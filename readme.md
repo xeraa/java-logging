@@ -13,14 +13,13 @@ The [slides for this talk are available on Speaker Deck](https://speakerdeck.com
 
 ## Dependencies
 
-* **JDK 8+** and **Gradle** to run the Java code.
+* **JDK 8+** and **Gradle** to run the Java code locally.
 * **Docker** (and Docker Compose) to run all the required components of the Elastic Stack (Filebeat, Logstash,
 Elasticsearch, and Kibana) and the containerized Java application.
 
 
 ## Usage
 
-* Build the Java application: `$ gradle build`
 * Bring up the Elastic Stack: `$ docker-compose up --build`
 * Rerun the Java application to generate more logs: `$ docker restart <ID of the Java app>`
 * Remove the Elastic Stack and its volumes: `$ docker-compose down -v`
@@ -72,3 +71,5 @@ Elasticsearch, and Kibana) and the containerized Java application.
 1. See why we needed the grok failure rule, because of the startup error from sending to Logstash directly.
 1. Filter to down to `container.name : "java_app"` and point out the hinting that stops the multiline statements from
    being broken up.
+1. Point out that we are breaking up the output into two indices — *docker-\** and *docker-java-\**.
+1. Show the new Logs UI (adapt the pattern to match the right index).
