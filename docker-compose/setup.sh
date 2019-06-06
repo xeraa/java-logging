@@ -44,9 +44,3 @@ curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
   "$KIBANA/api/kibana/settings/defaultIndex" \
   -d '{ "value": "docker" }'
 
-# Wait a bit until data has been collected to set the alias (fails on non-existant indices)
-sleep 2m
-
-# Add an alias to make our logs appear in the Log UI
-curl -f -XPOST -H "Content-Type: application/json" "$ELASTICSEARCH/_aliases" \
-  -d '{ "actions" : [ { "add" : { "index" : "structure", "alias" : "filebeat-structure" } } ] }'
