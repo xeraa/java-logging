@@ -30,7 +30,7 @@ done
 # Sleep an extra 30s to avoid the "Kibana server is not ready yet" error
 sleep 30s
 
-# Create the index patterns. For some reason the first request always fails, so send a foo for that
+# Create the index patterns
 for PATTERN in "parse" "send" "structure" "docker"
 do
   echo $PATTERN
@@ -42,5 +42,4 @@ done
 # Set a default index pattern
 curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
   "$KIBANA/api/kibana/settings/defaultIndex" \
-  -d '{ "value": "docker" }'
-
+  -d '{ "value": "parse" }'
