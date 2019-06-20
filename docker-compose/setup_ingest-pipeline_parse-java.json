@@ -10,7 +10,7 @@
     },
     {
       "kv": {
-        "field": "labels",
+        "field": "log.labels",
         "field_split": ", ",
         "value_split": "=",
         "ignore_failure": true
