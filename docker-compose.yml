@@ -178,6 +178,7 @@ services:
         - "co.elastic.logs/multiline.pattern=^\\["
         - "co.elastic.logs/multiline.negate=true"
         - "co.elastic.logs/multiline.match=after"
+    image: java-logging:1.0.0
     volumes:
       # Bind-mount the log folder to the host so a sidecar can collect the logs
       - './logs-docker/:/logs/'
