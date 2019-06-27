@@ -21,7 +21,7 @@ Elasticsearch, and Kibana) and the containerized Java application.
 ## Usage
 
 * Bring up the Elastic Stack: `$ docker-compose up --build`
-* Rerun the Java application to generate more logs: `$ docker restart <ID of the Java app>`
+* Rerun the Java application to generate more logs: `$ docker restart java_app`
 * Remove the Elastic Stack and its volumes: `$ docker-compose down -v`
 
 
@@ -54,7 +54,7 @@ Elasticsearch, and Kibana) and the containerized Java application.
 ### Send
 
 1. Show that the logs are missing from the first run, since no connection to Logstash had been established yet.
-1. Rerun the application and see it works now. And we have already seen the main downside of this approach.
+1. Rerun the application with `docker restart java_app` and see it works now. And we have already seen the main downside of this approach.
 1. Finally, you would need to rename the fields to match ECS in a Logstash filter.
 
 
