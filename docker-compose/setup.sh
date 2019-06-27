@@ -16,7 +16,7 @@ done
 curl -f -XPUT -H "Content-Type: application/json" "$ELASTICSEARCH/_ingest/pipeline/parse_java" \
   -d @/usr/local/bin/setup_ingest-pipeline_parse-java.json
 
-# Create an index template
+# Create an index template for Logstash
 curl -f -XPUT -H "Content-Type: application/json" "$ELASTICSEARCH/_template/general" \
   -d '{ "index_patterns": ["*"], "settings": { "number_of_shards": 1, "number_of_replicas": 0 } }'
 
