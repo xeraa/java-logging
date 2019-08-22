@@ -1,0 +1,38 @@
+heartbeat.monitors:
+- type: http
+  schedule: '@every 5s'
+  urls:
+    - http://elasticsearch:9200
+    - http://logstash:9600
+    - http://kibana:5601
+    - https://www.elastic.co
+
+- type: icmp
+  schedule: '@every 5s'
+  hosts:
+    - elasticsearch
+    - logstash
+    - kibana
+    - heartbeat
+    - metricbeat
+
+- type: tcp
+  schedule: '@every 5s'
+  hosts:
+    - "elasticsearch:9300"
+    - "logstash:5044"
+
+output.elasticsearch:
+  hosts: ['elasticsearch:9200']
+
+setup.kibana:
+  host: "http://kibana:5601"
+  protocol: "http"
+
+monitoring.enabled: true
+
+name: heartbeat-docker
+
+processors:
+  - add_docker_metadata: ~
+
