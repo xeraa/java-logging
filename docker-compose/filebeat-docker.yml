@@ -8,6 +8,24 @@ filebeat.autodiscover:
 processors:
   - add_host_metadata: ~
   - add_docker_metadata: ~
+  # extract the elasticsearch logging JSON into its own subfield
+  # and put the original text message in the message field,
+  # no need for the original JSON
+  - decode_json_fields:
+      fields: "message"
+      target: "elasticsearch"
+      when.contains:
+        container.name: "elasticsearch"
+  - drop_fields:
+      fields: "message"
+      when.contains:
+        container.name: "elasticsearch"
+  - rename:
+      fields:
+        - from: "elasticsearch.message"
+          to: "message"
+      when.contains:
+        container.name: "elasticsearch"
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
