@@ -149,6 +149,24 @@ services:
       - elasticsearch
       - kibana
 
+  heartbeat:
+    hostname: heartbeat
+    container_name: heartbeat
+    user: root # to read the docker socket
+    image: docker.elastic.co/beats/heartbeat:${ELASTIC_STACK_VERSION}
+    volumes:
+      - './docker-compose/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro'
+      # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    command: heartbeat -e
+    restart: on-failure
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+      - kibana
+      - logstash
+
 
   #Short lived container to configure the stack once Kibana and Elasticsearch are available
   configure_stack:
