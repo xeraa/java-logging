@@ -8,11 +8,11 @@ services:
     hostname: elasticsearch
     container_name: elasticsearch
     environment:
-      - 'http.host=0.0.0.0'
-      - 'transport.host=127.0.0.1'
-      - 'xpack.monitoring.collection.enabled=true'
+      - "http.host=0.0.0.0"
+      - "transport.host=127.0.0.1"
+      - "xpack.monitoring.collection.enabled=true"
     ports:
-      - '127.0.0.1:9200:9200'
+      - "127.0.0.1:9200:9200"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200/_cat/health"]
       interval: 30s
@@ -27,7 +27,7 @@ services:
     hostname: kibana
     container_name: kibana
     ports:
-      - '127.0.0.1:5601:5601'
+      - "127.0.0.1:5601:5601"
     networks:
       - stack
     depends_on:
@@ -39,10 +39,10 @@ services:
     hostname: logstash
     container_name: logstash
     environment:
-      - 'xpack.monitoring.enabled=true'
+      - "xpack.monitoring.enabled=true"
     ports:
-      - '127.0.0.1:4560:4560'
-      - '127.0.0.1:5044:5044'
+      - "127.0.0.1:4560:4560"
+      - "127.0.0.1:5044:5044"
     volumes:
       # Provide a pipeline configuration for Logstash with a bind-mounted file
       - ./docker-compose/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
@@ -59,13 +59,13 @@ services:
     container_name: filebeat_for_logstash
     volumes:
       # Bind-mount the logs/ directory, so Filebeat can read its files
-      - './logs-docker/:/mnt/logs/:ro'
+      - "./logs-docker/:/mnt/logs/:ro"
       # Bind-mount a custom configuration file
-      - './docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - "./docker-compose/filebeat-logstash.yml:/usr/share/filebeat/filebeat.yml:ro"
       # Bind-mount the config directory so it can be dynamically loaded
-      - './docker-compose/filebeat-logstash/config/:/usr/share/filebeat/config/:ro'
+      - "./docker-compose/filebeat-logstash/config/:/usr/share/filebeat/config/:ro"
       # Bind-mount the registry file to avoid data duplication between restarts
-      - './docker-compose/filebeat-logstash/registry/:/usr/share/filebeat/data/'
+      - "./docker-compose/filebeat-logstash/registry/:/usr/share/filebeat/data/"
     command: filebeat -e
     restart: on-failure
     networks:
@@ -82,14 +82,14 @@ services:
     container_name: filebeat_for_elasticsearch
     volumes:
       # Bind-mount the logs/ directory, so Filebeat can read its files
-      - './logs-docker/:/mnt/logs/:ro'
+      - "./logs-docker/:/mnt/logs/:ro"
       # Bind-mount a custom configuration file
-      - './docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - "./docker-compose/filebeat-elasticsearch.yml:/usr/share/filebeat/filebeat.yml:ro"
       # Bind-mount the config directory so it can be dynamically loaded
-      - './docker-compose/filebeat-elasticsearch/config/:/usr/share/filebeat/config/:ro'
+      - "./docker-compose/filebeat-elasticsearch/config/:/usr/share/filebeat/config/:ro"
       # Bind-mount the registry file to avoid data duplication between restarts
-      - './docker-compose/filebeat-elasticsearch/registry/:/usr/share/filebeat/data/'
-    command: 'filebeat -e'
+      - "./docker-compose/filebeat-elasticsearch/registry/:/usr/share/filebeat/data/"
+    command: filebeat -e
     restart: on-failure
     networks:
       - stack
@@ -106,16 +106,16 @@ services:
     user: root #To read the docker socket
     volumes:
       # Bind-mount the Docker log directory from the Java container, so Filebeat can read its files
-      - '/var/lib/docker/containers:/var/lib/docker/containers:ro'
+      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
       # Bind-mount a custom configuration file
-      - './docker-compose/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - "./docker-compose/filebeat-docker.yml:/usr/share/filebeat/filebeat.yml:ro"
       # Bind-mount the registry file to avoid data duplication between restarts
-      - './docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/'
+      - "./docker-compose/filebeat-docker/registry/:/usr/share/filebeat/data/"
       # Bind-mount the Filebeat log file (not going to system out to avoid a logging loop)
-      - './docker-compose/filebeat-docker/logs/:/usr/share/filebeat/logs/'
+      - "./docker-compose/filebeat-docker/logs/:/usr/share/filebeat/logs/"
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
-    command: 'filebeat'
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    command: filebeat
     restart: on-failure
     networks:
       - stack
@@ -132,16 +132,16 @@ services:
     image: docker.elastic.co/beats/metricbeat:${ELASTIC_STACK_VERSION}
     volumes:
       # Bind-mount a custom configuration file
-      - './docker-compose/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro'
+      - "./docker-compose/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
       # Bind-mount the config directory so it can be dynamically loaded
-      - './docker-compose/metricbeat/config/:/usr/share/metricbeat/config/:ro'
+      - "./docker-compose/metricbeat/config/:/usr/share/metricbeat/config/:ro"
       # Monitor the Docker host rather than the Metricbeat container; these are used by the system module
-      - '/proc:/hostfs/proc:ro'
-      - '/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro'
-      - '/:/hostfs:ro'
+      - "/proc:/hostfs/proc:ro"
+      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+      - "/:/hostfs:ro"
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
-    command: 'metricbeat -e'
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    command: metricbeat -e
     restart: on-failure
     networks:
       - stack
@@ -149,15 +149,18 @@ services:
       - elasticsearch
       - kibana
 
+
+  # Metricbeat to optionally collect metrics from the entire setup; not required for logging itself
   heartbeat:
     hostname: heartbeat
     container_name: heartbeat
-    user: root # to read the docker socket
+    user: root #To read the docker socket
     image: docker.elastic.co/beats/heartbeat:${ELASTIC_STACK_VERSION}
     volumes:
-      - './docker-compose/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro'
+      # Bind-mount a custom configuration file
+      - "./docker-compose/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro"
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     command: heartbeat -e
     restart: on-failure
     networks:
@@ -174,9 +177,9 @@ services:
     hostname: configure_stack
     container_name: configure_stack
     volumes:
-      - './docker-compose/setup.sh:/usr/local/bin/setup.sh:ro'
-      - './docker-compose/setup_ingest-pipeline_parse-java.json:/usr/local/bin/setup_ingest-pipeline_parse-java.json:ro'
-    command: '/usr/local/bin/setup.sh'
+      - "./docker-compose/setup.sh:/usr/local/bin/setup.sh:ro"
+      - "./docker-compose/setup_ingest-pipeline_parse-java.json:/usr/local/bin/setup_ingest-pipeline_parse-java.json:ro"
+    command: /usr/local/bin/setup.sh
     networks:
       - stack
     depends_on:
@@ -199,7 +202,7 @@ services:
     image: java-logging:1.0.0
     volumes:
       # Bind-mount the log folder to the host so a sidecar can collect the logs
-      - './logs-docker/:/logs/'
+      - "./logs-docker/:/logs/"
     networks:
       - stack
     depends_on:
