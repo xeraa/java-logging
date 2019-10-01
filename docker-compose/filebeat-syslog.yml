@@ -1,0 +1,31 @@
+filebeat.registry.path: /usr/share/filebeat/data/registry
+
+filebeat.inputs:
+- type: syslog
+  protocol.tcp:
+    host: "filebeat_syslog:9000"
+
+processors:
+  - add_host_metadata: ~
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  index: "syslog"
+
+setup:
+  ilm:
+    enabled: true
+    rollover_alias: "syslog"
+    pattern: "{now/M{yyyy.MM}}-00"
+  template:
+    pattern: "syslog"
+    name: "syslog"
+    settings.index:
+      number_of_shards: 1
+      number_of_replicas: 0
+
+logging.to_files: false
+
+xpack.monitoring:
+  enabled: true
+  elasticsearch: ~
