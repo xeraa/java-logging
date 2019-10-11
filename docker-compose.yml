@@ -75,6 +75,26 @@ services:
       - logstash
 
 
+  # Filebeat receiving syslog data and sending it to Elasticsearch
+  filebeat_syslog:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
+    hostname: filebeat_syslog
+    container_name: filebeat_syslog
+    command: filebeat -e
+    restart: on-failure
+    volumes:
+      # Bind-mount a custom configuration file
+      - "./docker-compose/filebeat-syslog.yml:/usr/share/filebeat/filebeat.yml:ro"
+      # Bind-mount the config directory so it can be dynamically loaded
+      - "./docker-compose/filebeat-syslog/config/:/usr/share/filebeat/config/:ro"
+      # Bind-mount the registry file to avoid data duplication between restarts
+      - "./docker-compose/filebeat-syslog/registry/:/usr/share/filebeat/data/"
+    networks:
+      - stack
+    depends_on:
+      - elasticsearch
+
+
   # Filebeat sending data to Elasticsearch
   filebeat_for_elasticsearch:
     image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
@@ -186,6 +206,7 @@ services:
       - elasticsearch
       - kibana
 
+
   #The Java app to be monitored
   java_app:
     hostname: java_app
@@ -209,6 +230,7 @@ services:
       - elasticsearch
       - logstash
 
+  # The syslog app sending messages continuously
   syslog_sender:
     image: syslog-sender:1.0.0
     hostname: syslog_sender
@@ -219,26 +241,8 @@ services:
     networks:
       - stack
     depends_on:
-      - filebeat_syslog
-
-  # Filebeat receiving syslog data
-  filebeat_syslog:
-    image: docker.elastic.co/beats/filebeat:${ELASTIC_STACK_VERSION}
-    hostname: filebeat_syslog
-    container_name: filebeat_syslog
-    command: filebeat -e
-    restart: on-failure
-    volumes:
-      # Bind-mount a custom configuration file
-      - "./docker-compose/filebeat-syslog.yml:/usr/share/filebeat/filebeat.yml:ro"
-      # Bind-mount the config directory so it can be dynamically loaded
-      - "./docker-compose/filebeat-syslog/config/:/usr/share/filebeat/config/:ro"
-      # Bind-mount the registry file to avoid data duplication between restarts
-      - "./docker-compose/filebeat-syslog/registry/:/usr/share/filebeat/data/"
-    networks:
-      - stack
-    depends_on:
       - elasticsearch
+      - filebeat_syslog
 
 
 networks:

@@ -1,7 +1,12 @@
 #!/bin/ash
 
-# start rsyslogd
+# Start rsyslogd
 /usr/sbin/rsyslogd
 
-# keep creating log messages forever
-while true ; do sleep 5 ; echo "This is a log message" | logger ; done
+# Keep creating log messages forever
+COUNTER = 0
+while true
+do sleep 5
+  $((COUNTER++))
+  echo "This is syslog message $COUNTER" | logger
+done
