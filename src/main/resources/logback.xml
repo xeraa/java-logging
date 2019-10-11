@@ -55,7 +55,6 @@
                     <pattern>
                         {
                         "log.level": "%level",
-                        "process.pid": "${PID:-}",
                         "thread": "%thread",
                         "class": "%logger",
                         "mdc": "%mdc",
