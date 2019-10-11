@@ -31,7 +31,7 @@ done
 sleep 30s
 
 # Create the index patterns
-for PATTERN in "parse" "send" "structure" "docker"
+for PATTERN in "parse" "send" "syslog" "structure" "docker"
 do
   echo $PATTERN
   curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: kibana" \
