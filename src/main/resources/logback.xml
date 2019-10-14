@@ -59,7 +59,8 @@
                         "thread": "%thread",
                         "class": "%logger",
                         "mdc": "%mdc",
-                        "message": "%message"
+                        "message": "%message",
+                        "stacktrace": "%ex{full}"
                         }
                     </pattern>
                 </pattern>
