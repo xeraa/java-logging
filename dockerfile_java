@@ -1,4 +1,16 @@
-FROM openjdk:11.0.1-jre-slim-stretch
-ARG JAR=java-logging-1.0.jar
-COPY build/libs/$JAR /app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Multi-Stage Build
+
+#Build application stage with Gradle
+FROM gradle:6.0.1-jdk11
+WORKDIR /usr/src/java-app
+ADD . /usr/src/java-code
+WORKDIR /usr/src/java-code
+RUN gradle build
+RUN cp -v /usr/src/java-code/build/libs/*.jar /usr/src/java-app/fizzbuzz.jar
+
+
+#Run application stage
+FROM openjdk:11.0.5-jre-slim-buster
+WORKDIR /app
+COPY --from=0 /usr/src/java-app/fizzbuzz.jar /app/fizzbuzz.jar
+ENTRYPOINT ["java","-jar","/app/fizzbuzz.jar"]

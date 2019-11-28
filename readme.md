@@ -13,21 +13,21 @@ The [slides for this talk are available on my website](https://xeraa.net/talks/c
 
 ## Dependencies
 
-* **JDK 8+** and **Gradle** to run the Java code locally.
 * **Docker** (and Docker Compose) to run all the required components of the Elastic Stack (Filebeat, Logstash,
-Elasticsearch, and Kibana) and the containerized Java application.
+Elasticsearch, and Kibana) and the containerized Java application. The application is built in Docker, so you don't need to have Java or Gradle installed locally.
 
 
 ## Usage
 
-* Bring up the Elastic Stack: `$ docker-compose up --build`
+* Bring up the Elastic Stack and the monitored application: `$ docker-compose up`
 * Rerun the Java application to generate more logs: `$ docker restart java_app`
+* Rebuild the Java application (for example to apply any code changes): `$ docker-compose up -d --no-deps --build java_app`
 * Remove the Elastic Stack and its volumes: `$ docker-compose down -v`
 
 
 ## Demo
 
-1. Start the demo with `$ docker-compose up --build`.
+1. Start the demo with `$ docker-compose up` or `$ docker-compose up --build` if you want to rebuild the custom images.
 1. Look at the code — which pattern are we building with log statements here?
 1. Look at Management -> Index Management in Kibana.
 

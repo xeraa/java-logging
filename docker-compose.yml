@@ -223,7 +223,7 @@ services:
     image: java-logging:1.0.0
     volumes:
       # Bind-mount the log folder to the host so a sidecar can collect the logs
-      - "./logs-docker/:/logs/"
+      - "./logs-docker/:/app/logs/"
     networks:
       - stack
     depends_on:
