@@ -8,7 +8,7 @@ This repository dives into five different logging patterns:
 * **Containerize**: Keep track of short-lived containers and configure their logging correctly.
 * **Orchestrate**: Stay on top of your logs even when services are short lived and dynamically allocated on Kubernetes.
 
-The [slides for this talk are available on Speaker Deck](https://speakerdeck.com/xeraa/centralized-logging-patterns).
+The [slides for this talk are available on my website](https://xeraa.net/talks/centralized-java-logging-patterns/).
 
 
 ## Dependencies
