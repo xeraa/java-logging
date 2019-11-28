@@ -6,9 +6,9 @@ filebeat.autodiscover:
       hints.enabled: true
 
 processors:
-  - add_host_metadata: ~
+  #- add_host_metadata: ~
   - add_docker_metadata: ~
-  # extract the elasticsearch logging JSON into its own subfield
+  # Extract the elasticsearch logging JSON into its own subfield
   # and put the original text message in the message field,
   # no need for the original JSON
   - decode_json_fields:

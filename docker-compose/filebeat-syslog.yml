@@ -6,7 +6,7 @@ filebeat.inputs:
     host: "filebeat_syslog:9000"
 
 processors:
-  - add_host_metadata: ~
+  #- add_host_metadata: ~
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
