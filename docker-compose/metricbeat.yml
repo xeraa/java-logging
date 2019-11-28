@@ -18,6 +18,6 @@ setup:
 
 logging.to_files: false
 
-xpack.monitoring:
+monitoring:
   enabled: true
   elasticsearch: ~

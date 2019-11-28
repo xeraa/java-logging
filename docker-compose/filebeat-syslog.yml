@@ -26,6 +26,7 @@ setup:
 
 logging.to_files: false
 
-xpack.monitoring:
+monitoring:
   enabled: true
-  elasticsearch: ~
+  elasticsearch:
+    hosts: ["http://elasticsearch:9200"]

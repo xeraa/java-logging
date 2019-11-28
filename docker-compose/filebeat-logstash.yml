@@ -12,7 +12,7 @@ output.logstash:
 
 logging.to_files: false
 
-xpack.monitoring:
+monitoring:
   enabled: true
   elasticsearch:
     hosts: ["http://elasticsearch:9200"]

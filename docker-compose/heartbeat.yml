@@ -22,17 +22,16 @@ heartbeat.monitors:
     - "elasticsearch:9300"
     - "logstash:5044"
 
+processors:
+  - add_docker_metadata: ~
+
 output.elasticsearch:
   hosts: ['elasticsearch:9200']
 
 setup.kibana:
   host: "http://kibana:5601"
-  protocol: "http"
 
-monitoring.enabled: true
-
-name: heartbeat-docker
-
-processors:
-  - add_docker_metadata: ~
-
+monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: ["http://elasticsearch:9200"]
