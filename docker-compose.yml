@@ -85,8 +85,6 @@ services:
     volumes:
       # Bind-mount a custom configuration file
       - "./docker-compose/filebeat-syslog.yml:/usr/share/filebeat/filebeat.yml:ro"
-      # Bind-mount the config directory so it can be dynamically loaded
-      - "./docker-compose/filebeat-syslog/config/:/usr/share/filebeat/config/:ro"
       # Bind-mount the registry file to avoid data duplication between restarts
       - "./docker-compose/filebeat-syslog/registry/:/usr/share/filebeat/data/"
     networks:
