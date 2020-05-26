@@ -20,4 +20,5 @@ logging.to_files: false
 
 monitoring:
   enabled: true
-  elasticsearch: ~
+  elasticsearch:
+    hosts: ["http://elasticsearch:9200"]
