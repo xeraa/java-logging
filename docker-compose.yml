@@ -67,7 +67,6 @@ services:
       # Bind-mount the registry file to avoid data duplication between restarts
       - "./docker-compose/filebeat-logstash/registry/:/usr/share/filebeat/data/"
     command: filebeat -e
-    restart: on-failure
     networks:
       - stack
     depends_on:
@@ -81,7 +80,6 @@ services:
     hostname: filebeat_syslog
     container_name: filebeat_syslog
     command: filebeat -e
-    restart: on-failure
     volumes:
       # Bind-mount a custom configuration file
       - "./docker-compose/filebeat-syslog.yml:/usr/share/filebeat/filebeat.yml:ro"
@@ -108,7 +106,6 @@ services:
       # Bind-mount the registry file to avoid data duplication between restarts
       - "./docker-compose/filebeat-elasticsearch/registry/:/usr/share/filebeat/data/"
     command: filebeat -e
-    restart: on-failure
     networks:
       - stack
     depends_on:
@@ -134,7 +131,6 @@ services:
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     command: filebeat
-    restart: on-failure
     networks:
       - stack
     depends_on:
@@ -180,7 +176,6 @@ services:
       # Bind-mount the Docker daemon to enable add_docker_metadata from within the container
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     command: heartbeat -e
-    restart: on-failure
     networks:
       - stack
     depends_on:
