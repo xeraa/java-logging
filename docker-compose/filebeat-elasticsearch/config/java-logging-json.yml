@@ -2,7 +2,8 @@
   paths:
     - /mnt/logs/*.json
   json:
-    message_key: message
     keys_under_root: true
+    overwrite_keys: true
+    add_error_key: true
   fields:
     environment: production
