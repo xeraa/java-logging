@@ -1,7 +1,7 @@
 # Multi-Stage Build
 
 #Build application stage with Gradle
-FROM gradle:6.0.1-jdk11
+FROM gradle:6.5.1-jdk11
 WORKDIR /usr/src/java-app
 ADD . /usr/src/java-code
 WORKDIR /usr/src/java-code
@@ -10,7 +10,7 @@ RUN cp -v /usr/src/java-code/build/libs/*.jar /usr/src/java-app/fizzbuzz.jar
 
 
 #Run application stage
-FROM openjdk:11.0.5-jre-slim-buster
+FROM openjdk:11.0.7-jre-slim-buster
 WORKDIR /app
 COPY --from=0 /usr/src/java-app/fizzbuzz.jar /app/fizzbuzz.jar
 ENTRYPOINT ["java","-jar","/app/fizzbuzz.jar"]
