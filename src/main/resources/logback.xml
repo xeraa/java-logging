@@ -36,10 +36,23 @@
         <destination>logstash:4560</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+
+
+    <!-- Configuration for logging to a JSON file with Elastic's ECS appender-->
+    <appender name="ecs" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}-ecs.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}-ecs.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="co.elastic.logging.logback.EcsEncoder">
+            <serviceName>LogMe</serviceName>
+        </encoder>
+    </appender>
     ​
 
-    <!-- Configuration for logging to a JSON file -->
-    <appender name="json" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Configuration for logging to a JSON file with Logback -->
+    <appender name="logback" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}.json</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
@@ -74,7 +87,7 @@
         <appender-ref ref="console"/>
         <appender-ref ref="flatfile"/>
         <appender-ref ref="logstash"/>
-        <appender-ref ref="json"/>
+        <appender-ref ref="ecs"/>
     </root>
 
 
