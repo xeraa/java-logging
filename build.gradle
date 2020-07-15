@@ -24,7 +24,7 @@ dependencies {
             "ch.qos.logback:logback-access:${logbackVersion}",
             "com.fasterxml.jackson.core:jackson-core:2.11.1",
             "net.logstash.logback:logstash-logback-encoder:6.4",
-            "co.elastic.logging:logback-ecs-encoder:0.4.0"
+            "co.elastic.logging:logback-ecs-encoder:0.5.0"
 }
 
 // Build a fat JAR and automatically run the main class in LogMe
