@@ -19,15 +19,15 @@ Elasticsearch, and Kibana) and the containerized Java application. The applicati
 
 ## Usage
 
-* Bring up the Elastic Stack and the monitored application: `$ docker-compose up`
+* Bring up the Elastic Stack and the monitored application: `$ docker compose up`
 * Rerun the Java application to generate more logs: `$ docker restart java_app`
-* Rebuild the Java application (for example to apply any code changes): `$ docker-compose up -d --no-deps --build java_app`
-* Remove the Elastic Stack and its volumes: `$ docker-compose down -v`
+* Rebuild the Java application (for example to apply any code changes): `$ docker compose up -d --no-deps --build java_app`
+* Remove the Elastic Stack and its volumes: `$ docker compose down -v`
 
 
 ## Demo
 
-1. Start the demo with `$ docker-compose up` or `$ docker-compose up --build` if you want to rebuild the custom images.
+1. Start the demo with `$ docker compose up` or `$ docker compose up --build` if you want to rebuild the custom images.
 1. Look at the code — which pattern are we building with log statements here?
 1. Look at Management -> Index Management in Kibana.
 
