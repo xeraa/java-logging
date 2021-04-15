@@ -10,7 +10,7 @@ RUN cp -v /usr/src/java-code/build/libs/*.jar /usr/src/java-app/fizzbuzz.jar
 
 
 #Run application stage
-FROM openjdk:11.0.7-jre-slim-buster
+FROM openjdk:11.0.10-jre-slim
 WORKDIR /app
 COPY --from=0 /usr/src/java-app/fizzbuzz.jar /app/fizzbuzz.jar
 ENTRYPOINT ["java","-jar","/app/fizzbuzz.jar"]
