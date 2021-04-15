@@ -8,8 +8,8 @@ services:
     hostname: elasticsearch
     container_name: elasticsearch
     environment:
-      - "http.host=0.0.0.0"
-      - "transport.host=127.0.0.1"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
       - "xpack.monitoring.collection.enabled=true"
     ports:
       - "127.0.0.1:9200:9200"
