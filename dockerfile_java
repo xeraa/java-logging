@@ -1,7 +1,7 @@
 # Multi-Stage Build
 
 #Build application stage with Gradle
-FROM gradle:6.5.1-jdk11
+FROM gradle:7.0.0-jdk11
 WORKDIR /usr/src/java-app
 ADD . /usr/src/java-code
 WORKDIR /usr/src/java-code
