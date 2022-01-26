@@ -18,7 +18,7 @@ buildscript {
 }
 
 dependencies {
-    implementation "org.slf4j:slf4j-api:1.7.33",
+    implementation "org.slf4j:slf4j-api:1.7.35",
                    "ch.qos.logback:logback-core:${logbackVersion}",
                    "ch.qos.logback:logback-classic:${logbackVersion}",
                    "ch.qos.logback:logback-access:${logbackVersion}",
