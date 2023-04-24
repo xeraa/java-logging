@@ -22,7 +22,7 @@ dependencies {
                    "ch.qos.logback:logback-core:${logbackVersion}",
                    "ch.qos.logback:logback-classic:${logbackVersion}",
                    "ch.qos.logback:logback-access:${logbackVersion}",
-                   "com.fasterxml.jackson.core:jackson-core:2.14.2",
+                   "com.fasterxml.jackson.core:jackson-core:2.15.0",
                    "net.logstash.logback:logstash-logback-encoder:7.3",
                    "co.elastic.logging:logback-ecs-encoder:1.5.0"
 }
