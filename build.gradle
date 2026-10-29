@@ -13,7 +13,7 @@ repositories {
 
 buildscript {
     ext {
-        logbackVersion = '1.6.5';
+        logbackVersion = '1.6.6';
     }
 }
 
